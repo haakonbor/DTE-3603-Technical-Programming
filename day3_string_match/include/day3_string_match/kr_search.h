@@ -16,7 +16,7 @@ namespace dte3603::string_match::algorithms
                        S_Sentinel_T      s_end,
                        BinaryPredicate_T pred = BinaryPredicate_T())
   {
-    return {};
+    return {end};
   }
 
 }   // namespace dte3603::string_match::algorithms

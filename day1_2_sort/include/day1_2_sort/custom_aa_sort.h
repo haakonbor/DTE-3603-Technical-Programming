@@ -11,10 +11,11 @@ namespace dte3603::sort::algorithms
   template <std::random_access_iterator Iterator_T,
             std::random_access_iterator Sentinel_T,
             typename Compare_T = std::less<> >
-  void custom_aa_sort(Iterator_T /*begin*/, Sentinel_T /*end*/,
-                      Compare_T /*comp*/ = Compare_T())
+  void custom_aa_sort(Iterator_T begin, Sentinel_T end,
+                      Compare_T comp = Compare_T())
   {
-
+    std::make_heap(begin, end, comp);
+    std::sort(begin, end, comp);
   }
 
 
