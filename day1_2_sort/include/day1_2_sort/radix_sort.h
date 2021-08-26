@@ -4,6 +4,7 @@
 // stl
 #include <iterator>
 #include <algorithm>
+#include "sorting_utils.h"
 
 namespace dte3603::sort::algorithms
 {
@@ -14,15 +15,17 @@ namespace dte3603::sort::algorithms
   void radix_sort(Iterator_T begin, Sentinel_T end,
                   Compare_T comp = Compare_T())
   {
+      if (begin == end)
+          return;
       using type = typename std::iterator_traits<Iterator_T>::value_type;
       int n = std::distance(begin, end);
-      auto max = *(std::max_element(begin, end, comp));
-      queue<type> queues[n];
+      type max = *(std::max_element(begin, end, comp));
+      int k = n_digits(max);
 
-      for (int i = 1; (max/i) > 0; i*= n) {
-          for (auto iter = begin; iter != end; iter++) {
-
-          }
+      for (int i = 0; i < k; i++) {
+          std::stable_sort(begin, end, [i](auto& X, auto& Y) {
+              return get_element(X, i) < get_element(Y, i);
+          });
       }
   }
 

@@ -14,6 +14,7 @@ namespace dte3603::sort::algorithms
   void custom_aa_sort(Iterator_T /*begin*/, Sentinel_T /*end*/,
                       Compare_T /*comp*/ = Compare_T())
   {
+
   }
 
 

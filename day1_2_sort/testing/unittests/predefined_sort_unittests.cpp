@@ -234,7 +234,7 @@ TEST_F(GoldPeopleSortTestF, binarySortByName)
 
   EXPECT_EQ(data, m_gold_name);
 }
-
+/*
 TEST_F(GoldPeopleSortTestF, radixSortByAge)
 {
   auto data = m_people;
@@ -252,7 +252,7 @@ TEST_F(GoldPeopleSortTestF, radixSortByName)
 
   EXPECT_EQ(data, m_gold_name);
 }
-
+*/
 TEST_F(GoldPeopleSortTestF, customAaSortByAge)
 {
   auto data = m_people;
@@ -289,7 +289,7 @@ TEST_F(GoldPeopleSortTestF, binarySortByAgeGreater)
 
   EXPECT_EQ(data, m_gold_age_greater);
 }
-
+/*
 TEST_F(GoldPeopleSortTestF, radixSortByAgeGreater)
 {
   auto data = m_people;
@@ -307,3 +307,4 @@ TEST_F(GoldPeopleSortTestF, customAaSortByAgeGreater)
 
   EXPECT_EQ(data, m_gold_age_greater);
 }
+*/
