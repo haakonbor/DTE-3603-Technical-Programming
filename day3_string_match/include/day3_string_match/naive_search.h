@@ -21,8 +21,8 @@ namespace dte3603::string_match::algorithms
       for (auto text_it = begin; text_it != end; text_it++) {
           size_t current_match_len = 0;
           auto current_it = text_it;
-          for (auto pattern_it = s_begin; pattern_it != s_end; pattern_it++) {
 
+          for (auto pattern_it = s_begin; pattern_it != s_end; pattern_it++) {
               if (pred(*pattern_it, *current_it)) {
                   current_it++;
                   current_match_len++;
@@ -33,11 +33,11 @@ namespace dte3603::string_match::algorithms
           }
 
           if (current_match_len == match_len) {
-              return {text_it};
+              return text_it;
           }
       }
 
-      return {end};
+      return end;
   }
 
 }   // namespace dte3603::string_match::algorithms
