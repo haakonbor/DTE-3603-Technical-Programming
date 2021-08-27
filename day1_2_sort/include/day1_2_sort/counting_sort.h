@@ -31,8 +31,6 @@ namespace dte3603::sort::algorithms
           for (auto i = 0ul; i < val; i++)
               *begin++ = key;
       }
-
-      //std::copy(sorted.begin(), sorted.end(), begin);
   }
 
 }   // namespace dte3603::sort::algorithms

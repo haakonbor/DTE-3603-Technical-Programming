@@ -14,8 +14,18 @@ namespace dte3603::sort::algorithms
   void custom_aa_sort(Iterator_T begin, Sentinel_T end,
                       Compare_T comp = Compare_T())
   {
-    std::make_heap(begin, end, comp);
-    std::sort(begin, end, comp);
+      std::make_heap(begin, end, [comp](const auto& arg1, const auto& arg2) {
+          return comp(arg2, arg1);
+      });
+
+      // Insertion sort
+      // reference implementation: https://www.geeksforgeeks.org/insertion-sort-using-c-stl/
+      for (auto iter = begin; iter != end; iter++) {
+          auto const insert_point = std::upper_bound(begin, iter, *iter, comp);
+
+          std::rotate(insert_point, iter, iter+1);
+      }
+
   }
 
 

@@ -18,7 +18,6 @@ namespace dte3603::sort::algorithms
       if (begin == end)
           return;
       using type = typename std::iterator_traits<Iterator_T>::value_type;
-      int n = std::distance(begin, end);
       type max = *(std::max_element(begin, end, comp));
       int k = n_digits(max);
 
