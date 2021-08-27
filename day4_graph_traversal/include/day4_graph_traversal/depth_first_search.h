@@ -40,8 +40,9 @@ namespace dte3603::graph::algorithms
 
           typename boost::graph_traits<Graph_T>::out_edge_iterator edge_it, edge_end;
 
-          // Put every vertex from the out edges in the stack
-          for (boost::tie(edge_it, edge_end) = boost::out_edges(current_vertex_desc, graph); edge_it != edge_end; edge_it++) {
+          // Put every vertex which has not been visited yet from the out edges in the stack
+          for (boost::tie(edge_end, edge_it) = boost::out_edges(current_vertex_desc, graph); edge_it != edge_end;) {
+              edge_it--;
               VertexDescriptor target_vertex = boost::target(*edge_it, graph);
               stack.push(target_vertex);
           }
