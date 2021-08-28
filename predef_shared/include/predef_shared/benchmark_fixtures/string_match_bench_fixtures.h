@@ -34,11 +34,14 @@ namespace dte3603::predef::benchmarking::string_match::fixtures
     using Base::Base;
     ~HelloWorldF() override {}
 
-    void SetUp(const benchmark::State& st) final
-    {
-      m_string   = "Hello world !_!";
-      m_sequence = "!_!";
-    }
+      void SetUp(const benchmark::State& st) final
+          {
+              for (int i = 0; i < 10; ++i) {
+                  m_string+=("aabcaaaac");
+              }
+            m_string += "aaacaaa";
+            m_sequence = "aaacaaa";
+          }
   };
 
 }   // namespace dte3603::predef::benchmarking::string_match::fixtures
