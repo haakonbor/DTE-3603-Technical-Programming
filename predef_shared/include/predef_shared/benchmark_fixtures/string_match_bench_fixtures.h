@@ -36,11 +36,11 @@ namespace dte3603::predef::benchmarking::string_match::fixtures
 
       void SetUp(const benchmark::State& st) final
           {
-              for (int i = 0; i < 10; ++i) {
-                  m_string+=("aabcaaaac");
-              }
-            m_string += "aaacaaa";
-            m_sequence = "aaacaaa";
+            for (int i = 0; i < 10000000; ++i) {
+                m_string+=("aabcaaaab");
+            }
+            m_string += "aabcaaaacaaacaab";
+            m_sequence = "aabcaaaacaaacaab";
           }
   };
 

@@ -20,26 +20,19 @@ namespace dte3603::string_match::algorithms
       auto const pattern = std::span(s_begin, s_end);
       size_t pattern_size = pattern.size();
       auto const table = get_table(pattern);
+      int i = 0;
 
       for (auto text_it = begin; text_it != end; text_it++) {
-          size_t current_match_len = 0;
           auto current_it = text_it;
 
-          for (int i = 0; i < pattern_size; i++) {
+          for (i = 0; i < pattern_size;) {
               if (pred(*current_it, pattern[i])) {
-                  current_match_len++;
                   current_it++;
+                  i++;
               }
               else {
                   if (i != 0) {
                       i = table[i-1];
-
-                      //if (i == 0) {
-                      //    break;
-                      //}
-
-                      i--;
-
                   }
                   else {
                       break;
@@ -47,46 +40,12 @@ namespace dte3603::string_match::algorithms
               }
           }
 
-          if (current_match_len == pattern_size) {
-              std::cout << *text_it << *(text_it + 1) << *(text_it + 2) << *(text_it + 3) << *(text_it + 4) << *(text_it + 5) << *(text_it + 6) << *(text_it + 7) << std::endl;
+          if (i == pattern_size) {
               return text_it;
           }
       }
 
       return end;
-
-
-
-      /*
-      auto       string_span  = std::span(begin, end);
-      auto       pattern_span = std::span(s_begin, s_end);
-      auto const string_size  = string_span.size();
-      auto const pattern_size = pattern_span.size();
-
-      auto lookup_table = get_table(pattern_span);
-
-      if (string_size >= pattern_size) {
-        for (auto i = 0; i < string_size; i++) {
-          auto count       = 0;
-          auto current_pos = i;
-          for (auto j = 0; j < pattern_size; j++) {
-            if (!pred(string_span[current_pos], pattern_span[j])) {
-              if (j != 0) {
-                j = lookup_table[j - 1];
-                break;
-              }
-              break;
-            }
-            count++;
-            current_pos++;
-          }
-          if (count == pattern_size) {
-            return begin + i;
-          }
-        }
-      }
-      return end;
-      */
   }
 
 }   // namespace dte3603::string_match::algorithms
