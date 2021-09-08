@@ -12,6 +12,7 @@
 
 namespace dte3603::predef::benchmarking::string_match::fixtures
 {
+  size_t BENCHMARK_SIZE = 10;
 
   namespace detail
   {
@@ -36,12 +37,46 @@ namespace dte3603::predef::benchmarking::string_match::fixtures
 
       void SetUp(const benchmark::State& st) final
           {
-            for (int i = 0; i < 10000000; ++i) {
-                m_string+=("aabcaaaab");
+            m_string = "Hello world !_!";
+            m_sequence = "!_!";
+          }
+  };
+
+  struct ShortPatternF : detail::StringMatchBenchmarkFixtureTemplate {
+      using Base = detail::StringMatchBenchmarkFixtureTemplate;
+
+      using Base::Base;
+      ~ShortPatternF() override {}
+
+        void SetUp(const benchmark::State& st) final
+        {
+            for (int i = 0; i < BENCHMARK_SIZE; i++) {
+                m_string += "aabcaaab";
             }
+
             m_string += "aabcaaaacaaacaab";
             m_sequence = "aabcaaaacaaacaab";
-          }
+        }
+  };
+
+  struct LongPatternF : detail::StringMatchBenchmarkFixtureTemplate {
+      using Base = detail::StringMatchBenchmarkFixtureTemplate;
+
+      using Base::Base;
+      ~LongPatternF() override {}
+
+        void SetUp(const benchmark::State& st) final
+        {
+            for (int i = 0; i < BENCHMARK_SIZE; i++) {
+                m_string += "aabcaaab";
+            }
+
+            for (int i = 0; i < 5; i++) {
+                m_string += "aabcaaaacaaacaab";
+                m_sequence += "aabcaaaacaaacaab";
+            }
+
+        }
   };
 
 }   // namespace dte3603::predef::benchmarking::string_match::fixtures
