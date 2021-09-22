@@ -57,6 +57,10 @@ namespace dte3603::predef::concepts::graph
   concept BidirectionalGraph = Graph<Graph_T>and
     std::same_as<typename Graph_T::directed_selector, boost::bidirectionalS>;
 
+  template <typename Graph_T>
+  concept DirectionalGraph = Graph<Graph_T>and
+    std::same_as<typename Graph_T::directed_selector, boost::directedS>;
+
 
 }   // namespace dte3603::predef::concepts::graph
 
