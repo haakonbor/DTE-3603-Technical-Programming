@@ -18,8 +18,8 @@ namespace alg = dte3603::week2::algorithms;
 // DAGOneF
 TEST_F(DGOneF, getMaxFlowTest)
 {
-  int flow = alg::getMaxFlow(gold->graph(), gold->s(), gold->t());
-  int gold_flow = gold->flowFromStoTGold();
+  double flow      = alg::getMaxFlow(gold->graph(), gold->s(), gold->t());
+  double gold_flow = gold->flowFromStoTGold();
 
   EXPECT_EQ(flow, gold_flow);
 }

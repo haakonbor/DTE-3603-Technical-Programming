@@ -10,6 +10,7 @@
 
 // graph traversal library
 #include "breadth_first_search.h"
+#include "max_flow_utils.h"
 
 // stl
 #include <vector>
@@ -20,43 +21,28 @@
 namespace dte3603::week2::algorithms
 {
   template <predef::concepts::graph::DirectionalGraph Graph_T>
-  int getMaxFlow([[maybe_unused]] Graph_T const& graph,
-                 [[maybe_unused]]
-                 typename Graph_T::vertex_descriptor const& source,
-                 [[maybe_unused]]
-                 typename Graph_T::vertex_descriptor const& sink)
+  double
+  getMaxFlow([[maybe_unused]] Graph_T const&                             g,
+             [[maybe_unused]] typename Graph_T::vertex_descriptor const& source,
+             [[maybe_unused]] typename Graph_T::vertex_descriptor const& sink)
   {
-      auto residual_graph = graph;
+    using VertexDescriptor            = typename Graph_T::vertex_descriptor;
+    using EdgeDescriptor              = typename Graph_T::edge_descriptor;
+    auto                        graph = g;
+    auto                        residual_graph = getResidualGraph(graph);
+    std::vector<EdgeDescriptor> shortest_path
+      = bfsUnweightedShortestPath(residual_graph, source, sink);
+    double flow_increase = 0.;
 
-      typename boost::graph_traits<Graph_T>::edge_iterator edge_it, edge_end;
-      std::tie(edge_it, edge_end) = boost::edges(residual_graph);
+    while (shortest_path.size() != 0) {
+      flow_increase += increaseFlow(shortest_path, graph);
+      residual_graph = getResidualGraph(graph);
+      shortest_path  = bfsUnweightedShortestPath(residual_graph, source, sink);
+    }
 
-      int count = 0;
+    // find flow of max flow graph
 
-      for (; edge_it != edge_end; edge_it++) {
-          auto source_vertex = (*edge_it).m_source;
-          auto target_vertex = (*edge_it).m_target;
-
-          std::cout << residual_graph[source_vertex].name << " to " << residual_graph[target_vertex].name << std::endl;
-
-          //boost::add_edge(target_vertex, source_vertex,
-          //                {0,0,0,1},
-          //                residual_graph);
-          if (residual_graph[*edge_it].flow == residual_graph[*edge_it].capacity) {
-
-          }
-          count++;
-      }
-
-      count = 0;
-
-      std::tie(edge_it, edge_end) = boost::edges(residual_graph);
-
-      for (; edge_it != edge_end; edge_it++) {
-          count++;
-      }
-
-      return 4;
+    return flow_increase;
   }
 
 

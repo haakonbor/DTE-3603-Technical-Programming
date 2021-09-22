@@ -200,18 +200,7 @@ namespace dte3603::predef::testing::week2
       VD const& s() const { return S; }
       VD const& t() const { return T; }
 
-      int flowFromStoTGold() const { return 4; }
-
-      VDVector bfsFromSGold() const
-      {
-        return {vertices[0][0],
-                vertices[0][1],
-                vertices[0][2],
-                vertices[1][0],
-                vertices[1][1],
-                vertices[1][2],
-                T};
-      }
+      double flowFromStoTGold() const { return 3.; }
     };
 
   }   // namespace gold
