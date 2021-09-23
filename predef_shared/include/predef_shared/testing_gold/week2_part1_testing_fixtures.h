@@ -20,8 +20,9 @@ namespace dte3603::predef::testing::week2::fixtures
     void TearDown() final { gold.release(); }
   };
 
-  using DGOneF = GoldWeek2_Part1_TestF<gold::DGOne>;
-  using DGTwoF = GoldWeek2_Part1_TestF<gold::DGTwo>;
+  using DGOneF   = GoldWeek2_Part1_TestF<gold::DGOne>;
+  using DGTwoF   = GoldWeek2_Part1_TestF<gold::DGTwo>;
+  using DGThreeF = GoldWeek2_Part1_TestF<gold::DGThree>;
 
 }   // namespace dte3603::predef::testing::week2::fixtures
 

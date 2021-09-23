@@ -219,6 +219,168 @@ namespace dte3603::predef::testing::week2
         std::ifstream infile(
           "C:/dev/dte-3603_template_source_base/predef_shared/include/"
           "predef_shared/testing_gold/data/DGTwo_test.txt");
+        if (infile.fail()) {
+          throw "FILE DOES NOT EXIST";
+        }
+        std::string current_line;
+        int         count  = 0;
+        int         floors = 0;
+
+        while (std::getline(infile, current_line)) {
+          if (count < 2) {
+            if (count == 0) {
+              floors = std::stoi(current_line);
+
+              std::vector<VD> floor_vector;
+              for (int i = 0; i < floors; i++) {
+                vertices.push_back(floor_vector);
+              }
+            }
+            else if (count == 1) {
+              std::stringstream current_stream(current_line);
+              std::string       vertices_in_floor;
+
+              for (int i = 1;
+                   i <= floors && current_stream >> vertices_in_floor; i++) {
+                for (int n = 1; n <= std::stoi(vertices_in_floor); n++) {
+                  auto v = boost::add_vertex(
+                    VP{.name = std::to_string(i) + "." + std::to_string(n)},
+                    m_graph);
+                  vertices[i - 1].push_back(v);
+                }
+              }
+
+              S = boost::add_vertex(VP{.name = "S"}, m_graph);
+              T = boost::add_vertex(VP{.name = "T"}, m_graph);
+            }
+            count++;
+            continue;
+          }
+
+          else {
+            std::stringstream current_stream(current_line);
+            std::string       source;
+            current_stream >> source;
+            std::string target;
+            current_stream >> target;
+            std::string capacity = "";
+            current_stream >> capacity;
+            std::string cost = "";
+            current_stream >> cost;
+
+            std::string temp;
+
+            int source_floor  = 0;
+            int source_vertex = 0;
+            int target_floor  = 0;
+            int target_vertex = 0;
+
+            VD source_vertex_desc = NULL;
+
+            if (source[0] == 'S') {
+              source_vertex_desc = S;
+            }
+
+            else {
+              for (int i = 0; i < source.size(); i++) {
+                if (source[i] != ',') {
+                  temp += source[i];
+                }
+                else {
+                  source_floor  = std::stoi(temp);
+                  source_vertex = std::stoi(source.substr(i + 1));
+                  source_vertex_desc
+                    = vertices[source_floor - 1][source_vertex - 1];
+                }
+              }
+            }
+
+            temp = "";
+
+            VD target_vertex_desc = NULL;
+
+            if (target[0] == 'T') {
+              target_vertex_desc = T;
+            }
+
+            else {
+              for (int i = 0; i < target.size(); i++) {
+                if (target[i] != ',') {
+                  temp += target[i];
+                }
+                else {
+                  target_floor  = std::stoi(temp);
+                  target_vertex = std::stoi(target.substr(i + 1));
+                  target_vertex_desc
+                    = vertices[target_floor - 1][target_vertex - 1];
+                }
+              }
+            }
+
+            if (source_vertex_desc == S || target_vertex_desc == T) {
+              boost::add_edge(source_vertex_desc, target_vertex_desc,
+                              EP{.flow     = 3.,
+                                 .capacity = std::stod(capacity),
+                                 .cost     = std::stod(cost),
+                                 .distance = 0},
+                              m_graph);
+            }
+
+            else {
+              boost::add_edge(source_vertex_desc, target_vertex_desc,
+                              EP{.flow     = 0.,
+                                 .capacity = std::stod(capacity),
+                                 .cost     = std::stod(cost),
+                                 .distance = 0},
+                              m_graph);
+            }
+          }
+        }
+
+        // Flow from MIT example
+        m_graph[boost::edge(vertices[0][0], vertices[0][1], m_graph).first].flow
+          = 1;
+        m_graph[boost::edge(vertices[0][0], vertices[0][2], m_graph).first].flow
+          = 2;
+        m_graph[boost::edge(vertices[0][1], vertices[1][0], m_graph).first].flow
+          = 2;
+        m_graph[boost::edge(vertices[0][2], vertices[0][1], m_graph).first].flow
+          = 1;
+        m_graph[boost::edge(vertices[0][2], vertices[1][1], m_graph).first].flow
+          = 2;
+        m_graph[boost::edge(vertices[1][0], vertices[0][2], m_graph).first].flow
+          = 1;
+        m_graph[boost::edge(vertices[1][1], vertices[1][0], m_graph).first].flow
+          = 1;
+        m_graph[boost::edge(vertices[1][0], vertices[1][2], m_graph).first].flow
+          = 2;
+        m_graph[boost::edge(vertices[1][1], vertices[1][2], m_graph).first].flow
+          = 1;
+      }
+
+      ~DGTwo() override {}
+
+      VD const& s() const { return S; }
+      VD const& t() const { return T; }
+
+      double flowFromStoTGold() const { return 4.; }
+    };
+
+    class DGThree
+      : public detail::GoldGraphTemplate<detail::types::DirectionalGraph> {
+
+      using Base = detail::GoldGraphTemplate<detail::types::DirectionalGraph>;
+
+      std::vector<std::vector<VD>> vertices;
+      VD                           S;
+      VD                           T;
+
+    public:
+      DGThree()
+      {
+        std::ifstream infile(
+          "C:/dev/dte-3603_template_source_base/predef_shared/include/"
+          "predef_shared/testing_gold/data/DGThree_test.txt");
         std::string current_line;
         int         count  = 0;
         int         floors = 0;
@@ -315,7 +477,7 @@ namespace dte3603::predef::testing::week2
             }
 
             boost::add_edge(source_vertex_desc, target_vertex_desc,
-                            EP{.flow     = 1.,
+                            EP{.flow     = 0.,
                                .capacity = std::stod(capacity),
                                .cost     = std::stod(cost),
                                .distance = 0},
@@ -324,12 +486,12 @@ namespace dte3603::predef::testing::week2
         }
       }
 
-      ~DGTwo() override {}
+      ~DGThree() override {}
 
       VD const& s() const { return S; }
       VD const& t() const { return T; }
 
-      double flowFromStoTGold() const { return 4.; }
+      double flowFromStoTGold() const { return 2000.; }
     };
 
   }   // namespace gold

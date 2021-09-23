@@ -43,8 +43,6 @@ namespace dte3603::week2::algorithms
       shortest_path  = bfsUnweightedShortestPath(residual_graph, source, sink);
     }
 
-    // find flow of max flow graph
-
     return current_flow;
   }
 

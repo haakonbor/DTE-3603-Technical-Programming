@@ -33,3 +33,12 @@ TEST_F(DGTwoF, getMaxFlowTest)
 
   EXPECT_EQ(flow, gold_flow);
 }
+
+// DGThreeF
+TEST_F(DGThreeF, getMaxFlowTest)
+{
+  double flow      = alg::getMaxFlow(gold->graph(), gold->s(), gold->t());
+  double gold_flow = gold->flowFromStoTGold();
+
+  EXPECT_EQ(flow, gold_flow);
+}
