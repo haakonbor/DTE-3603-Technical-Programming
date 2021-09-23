@@ -129,22 +129,51 @@ namespace dte3603::week2::algorithms
   double increaseFlow(std::vector<typename Graph_T::edge_descriptor> path,
                       [[maybe_unused]] Graph_T&                      graph)
   {
+    using EdgeDescriptor = typename Graph_T::edge_descriptor;
+
     double min_residue = std::numeric_limits<double>::max();
 
     for (auto edge = path.begin() + 1; edge != path.end() - 1; edge++) {
-      auto current_edge
-        = boost::edge((*edge).m_source, (*edge).m_target, graph).first;
-      double current_edge_residue
-        = graph[current_edge].capacity - graph[current_edge].flow;
-      if (current_edge_residue < min_residue) {
-        min_residue = current_edge_residue;
+      std::pair<EdgeDescriptor, bool> current_edge
+        = boost::edge((*edge).m_source, (*edge).m_target, graph);
+
+      if (current_edge.second == false) {
+        current_edge = boost::edge((*edge).m_target, (*edge).m_source, graph);
+
+        if (current_edge.second == false) {
+          throw "SHORTEST PATH EDGE NOT FOUND IN FLOW GRAPH!";
+        }
+
+        double current_edge_flow = graph[current_edge.first].flow;
+        if (current_edge_flow < min_residue) {
+          min_residue = current_edge_flow;
+        }
+      }
+      else {
+        double current_edge_residue
+          = graph[current_edge.first].capacity - graph[current_edge.first].flow;
+        if (current_edge_residue < min_residue) {
+          min_residue = current_edge_residue;
+        }
       }
     }
 
     for (auto& edge : path) {
-      auto current_edge
-        = boost::edge(edge.m_source, edge.m_target, graph).first;
-      graph[current_edge].flow += min_residue;
+      std::pair<EdgeDescriptor, bool> current_edge
+        = boost::edge(edge.m_source, edge.m_target, graph);
+
+      if (current_edge.second == false) {
+        current_edge = boost::edge(edge.m_target, edge.m_source, graph);
+
+        if (current_edge.second == false) {
+          throw "SHORTEST PATH EDGE NOT FOUND IN FLOW GRAPH!";
+        }
+
+        graph[current_edge.first].flow -= min_residue;
+      }
+      else {
+        graph[current_edge.first].flow += min_residue;
+      }
     }
 
     return min_residue;

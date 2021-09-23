@@ -32,17 +32,20 @@ namespace dte3603::week2::algorithms
     auto                        residual_graph = getResidualGraph(graph);
     std::vector<EdgeDescriptor> shortest_path
       = bfsUnweightedShortestPath(residual_graph, source, sink);
-    double flow_increase = 0.;
+
+    typename boost::graph_traits<Graph_T>::out_edge_iterator edge_it, edge_end;
+    boost::tie(edge_it, edge_end) = boost::out_edges(source, graph);
+    double current_flow           = graph[*edge_it].flow;
 
     while (shortest_path.size() != 0) {
-      flow_increase += increaseFlow(shortest_path, graph);
+      current_flow += increaseFlow(shortest_path, graph);
       residual_graph = getResidualGraph(graph);
       shortest_path  = bfsUnweightedShortestPath(residual_graph, source, sink);
     }
 
     // find flow of max flow graph
 
-    return flow_increase;
+    return current_flow;
   }
 
 

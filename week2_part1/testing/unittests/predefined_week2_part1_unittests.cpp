@@ -15,8 +15,18 @@ using namespace dte3603::predef::testing::week2::fixtures;
 namespace alg = dte3603::week2::algorithms;
 
 
-// DAGOneF
+// DGOneF
 TEST_F(DGOneF, getMaxFlowTest)
+{
+  double flow      = alg::getMaxFlow(gold->graph(), gold->s(), gold->t());
+  double gold_flow = gold->flowFromStoTGold();
+
+  EXPECT_EQ(flow, gold_flow);
+}
+
+
+// DGTwoF
+TEST_F(DGTwoF, getMaxFlowTest)
 {
   double flow      = alg::getMaxFlow(gold->graph(), gold->s(), gold->t());
   double gold_flow = gold->flowFromStoTGold();
