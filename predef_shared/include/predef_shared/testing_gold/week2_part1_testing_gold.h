@@ -491,7 +491,7 @@ namespace dte3603::predef::testing::week2
       VD const& s() const { return S; }
       VD const& t() const { return T; }
 
-      double flowFromStoTGold() const { return 2000.; }
+      double flowFromStoTGold() const { return 200000000000.; }
     };
 
   }   // namespace gold

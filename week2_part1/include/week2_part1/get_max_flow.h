@@ -40,7 +40,9 @@ namespace dte3603::week2::algorithms
     while (shortest_path.size() != 0) {
       current_flow += increaseFlow(shortest_path, graph);
       residual_graph = getResidualGraph(graph);
-      shortest_path  = bfsUnweightedShortestPath(residual_graph, source, sink);
+      // shortest_path  = bfsUnweightedShortestPath(residual_graph, source,
+      // sink);
+      shortest_path = dfsUnweightedPath(residual_graph, source, sink);
     }
 
     return current_flow;
