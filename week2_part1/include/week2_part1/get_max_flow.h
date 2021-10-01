@@ -1,34 +1,19 @@
 #ifndef DTE3603_WEEK2_PART1_H
 #define DTE3603_WEEK2_PART1_H
 
-// boost
-#include <boost/graph/adjacency_list.hpp>
-
-// concepts
-#include <predef_shared/concepts/graphs.h>
-#include <predef_shared/concepts/operators.h>
-
-// graph traversal library
-#include "breadth_first_search.h"
+// Helper functions
 #include "max_flow_utils.h"
-
-// stl
-#include <vector>
-#include <queue>
-#include <set>
-#include <map>
 
 namespace dte3603::week2::algorithms
 {
   template <predef::concepts::graph::DirectionalGraph Graph_T>
   double
-  getMaxFlow([[maybe_unused]] Graph_T const&                             g,
+  getMaxFlow([[maybe_unused]] Graph_T&                                   graph,
              [[maybe_unused]] typename Graph_T::vertex_descriptor const& source,
              [[maybe_unused]] typename Graph_T::vertex_descriptor const& sink)
   {
-    using VertexDescriptor            = typename Graph_T::vertex_descriptor;
-    using EdgeDescriptor              = typename Graph_T::edge_descriptor;
-    auto                        graph = g;
+    using VertexDescriptor = typename Graph_T::vertex_descriptor;
+    using EdgeDescriptor   = typename Graph_T::edge_descriptor;
     auto                        residual_graph = getResidualGraph(graph);
     std::vector<EdgeDescriptor> shortest_path
       = bfsUnweightedShortestPath(residual_graph, source, sink);

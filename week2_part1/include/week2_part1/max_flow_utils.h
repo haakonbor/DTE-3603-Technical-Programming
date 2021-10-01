@@ -134,20 +134,25 @@ namespace dte3603::week2::algorithms
     std::string edge_type_added = "";
 
     if (graph[edge].flow == graph[edge].capacity) {
-      boost::add_edge(target_vertex, source_vertex, {0, 0, 0, 1},
+      boost::add_edge(target_vertex, source_vertex,
+                      {0, 0, -1 * graph[edge].cost * graph[edge].flow},
                       residual_graph);
       edge_type_added = "Backwards";
     }
     else if (graph[edge].flow == 0) {
-      boost::add_edge(source_vertex, target_vertex, {0, 0, 0, 1},
+      boost::add_edge(source_vertex, target_vertex,
+                      {0, 0, graph[edge].cost * graph[edge].capacity},
                       residual_graph);
       edge_type_added = "Forward";
     }
     else {
-      boost::add_edge(target_vertex, source_vertex, {0, 0, 0, 1},
+      boost::add_edge(target_vertex, source_vertex,
+                      {0, 0, -1 * graph[edge].cost * graph[edge].flow},
                       residual_graph);
-      boost::add_edge(source_vertex, target_vertex, {0, 0, 0, 1},
-                      residual_graph);
+      boost::add_edge(
+        source_vertex, target_vertex,
+        {0, 0, graph[edge].cost * (graph[edge].capacity - graph[edge].flow)},
+        residual_graph);
 
       edge_type_added = "Both";
     }

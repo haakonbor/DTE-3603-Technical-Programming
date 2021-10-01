@@ -38,7 +38,6 @@ namespace dte3603::predef::testing::week2
           double flow;
           double capacity;
           double cost;
-          double distance;
         };
 
         using GraphProperties = boost::no_property;
@@ -66,7 +65,7 @@ namespace dte3603::predef::testing::week2
       GoldGraphTemplate()          = default;
       virtual ~GoldGraphTemplate() = default;
 
-      Graph const& graph() const { return m_graph; }
+      Graph& graph() { return m_graph; }
 
       Graph m_graph;
     };
@@ -188,8 +187,7 @@ namespace dte3603::predef::testing::week2
             boost::add_edge(source_vertex_desc, target_vertex_desc,
                             EP{.flow     = 0.,
                                .capacity = std::stod(capacity),
-                               .cost     = std::stod(cost),
-                               .distance = 0},
+                               .cost     = std::stod(cost)},
                             m_graph);
           }
         }
@@ -321,8 +319,7 @@ namespace dte3603::predef::testing::week2
               boost::add_edge(source_vertex_desc, target_vertex_desc,
                               EP{.flow     = 3.,
                                  .capacity = std::stod(capacity),
-                                 .cost     = std::stod(cost),
-                                 .distance = 0},
+                                 .cost     = std::stod(cost)},
                               m_graph);
             }
 
@@ -330,8 +327,7 @@ namespace dte3603::predef::testing::week2
               boost::add_edge(source_vertex_desc, target_vertex_desc,
                               EP{.flow     = 0.,
                                  .capacity = std::stod(capacity),
-                                 .cost     = std::stod(cost),
-                                 .distance = 0},
+                                 .cost     = std::stod(cost)},
                               m_graph);
             }
           }
@@ -363,7 +359,19 @@ namespace dte3603::predef::testing::week2
       VD const& s() const { return S; }
       VD const& t() const { return T; }
 
-      double flowFromStoTGold() const { return 4.; }
+      double                       flowFromStoTGold() const { return 4.; }
+      std::vector<std::vector<VD>> cycleAtStartGold() const
+      {
+        std::vector<std::vector<VD>> cycles;
+        std::vector<VD>              cycle;
+        cycle.push_back(vertices[0][2]);
+        cycle.push_back(vertices[1][0]);
+        cycle.push_back(vertices[1][1]);
+
+        cycles.push_back(cycle);
+
+        return cycles;
+      }
     };
 
     class DGThree
@@ -479,8 +487,7 @@ namespace dte3603::predef::testing::week2
             boost::add_edge(source_vertex_desc, target_vertex_desc,
                             EP{.flow     = 0.,
                                .capacity = std::stod(capacity),
-                               .cost     = std::stod(cost),
-                               .distance = 0},
+                               .cost     = std::stod(cost)},
                             m_graph);
           }
         }
