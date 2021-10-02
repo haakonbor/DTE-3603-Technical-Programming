@@ -6,7 +6,7 @@ if(GTest_FOUND)
 
   set( UNITTEST_DIR unittests )
   set( UNITTESTS
-    predefined_week2_part1_unittests
+    predefined_week2_unittests
     )
 
   ADD_UNITTESTS(dte3603::${PROJECT_NAME} ${UNITTEST_DIR} UNITTESTS

@@ -1,5 +1,5 @@
-#ifndef WEEK2_PART1_TESTING_GOLD_H
-#define WEEK2_PART1_TESTING_GOLD_H
+#ifndef WEEK2_TESTING_GOLD_H
+#define WEEK2_TESTING_GOLD_H
 
 
 // boost
@@ -35,9 +35,9 @@ namespace dte3603::predef::testing::week2
         };
 
         struct EdgeProperties {
-          double flow;
-          double capacity;
-          double cost;
+          int flow;
+          int capacity;
+          int cost;
         };
 
         using GraphProperties = boost::no_property;
@@ -185,9 +185,9 @@ namespace dte3603::predef::testing::week2
             }
 
             boost::add_edge(source_vertex_desc, target_vertex_desc,
-                            EP{.flow     = 0.,
-                               .capacity = std::stod(capacity),
-                               .cost     = std::stod(cost)},
+                            EP{.flow     = 0,
+                               .capacity = std::stoi(capacity),
+                               .cost     = std::stoi(cost)},
                             m_graph);
           }
         }
@@ -198,7 +198,7 @@ namespace dte3603::predef::testing::week2
       VD const& s() const { return S; }
       VD const& t() const { return T; }
 
-      double flowFromStoTGold() const { return 3.; }
+      int flowFromStoTGold() const { return 3; }
     };
 
 
@@ -317,17 +317,17 @@ namespace dte3603::predef::testing::week2
 
             if (source_vertex_desc == S || target_vertex_desc == T) {
               boost::add_edge(source_vertex_desc, target_vertex_desc,
-                              EP{.flow     = 3.,
-                                 .capacity = std::stod(capacity),
-                                 .cost     = std::stod(cost)},
+                              EP{.flow     = 3,
+                                 .capacity = std::stoi(capacity),
+                                 .cost     = std::stoi(cost)},
                               m_graph);
             }
 
             else {
               boost::add_edge(source_vertex_desc, target_vertex_desc,
-                              EP{.flow     = 0.,
-                                 .capacity = std::stod(capacity),
-                                 .cost     = std::stod(cost)},
+                              EP{.flow     = 0,
+                                 .capacity = std::stoi(capacity),
+                                 .cost     = std::stoi(cost)},
                               m_graph);
             }
           }
@@ -359,7 +359,7 @@ namespace dte3603::predef::testing::week2
       VD const& s() const { return S; }
       VD const& t() const { return T; }
 
-      double                       flowFromStoTGold() const { return 4.; }
+      int                          flowFromStoTGold() const { return 4; }
       std::vector<std::vector<VD>> cycleAtStartGold() const
       {
         std::vector<std::vector<VD>> cycles;
@@ -485,9 +485,9 @@ namespace dte3603::predef::testing::week2
             }
 
             boost::add_edge(source_vertex_desc, target_vertex_desc,
-                            EP{.flow     = 0.,
-                               .capacity = std::stod(capacity),
-                               .cost     = std::stod(cost)},
+                            EP{.flow     = 0,
+                               .capacity = std::stoi(capacity),
+                               .cost     = std::stoi(cost)},
                             m_graph);
           }
         }
@@ -498,7 +498,7 @@ namespace dte3603::predef::testing::week2
       VD const& s() const { return S; }
       VD const& t() const { return T; }
 
-      double flowFromStoTGold() const { return 200000000000.; }
+      int flowFromStoTGold() const { return 2000000000; }
     };
 
   }   // namespace gold
@@ -506,4 +506,4 @@ namespace dte3603::predef::testing::week2
 }   // namespace dte3603::predef::testing::week2
 
 
-#endif   // WEEK2_PART1_TESTING_GOLD_H
+#endif   // WEEK2_TESTING_GOLD_H

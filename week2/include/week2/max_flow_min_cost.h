@@ -8,22 +8,25 @@
 namespace dte3603::week2::algorithms
 {
   template <predef::concepts::graph::DirectionalGraph Graph_T>
-  std::pair<double, double> getMinCostMaxFlow(
+  std::pair<int, int> getMinCostMaxFlow(
     [[maybe_unused]] Graph_T&                                   graph,
     [[maybe_unused]] typename Graph_T::vertex_descriptor const& source,
     [[maybe_unused]] typename Graph_T::vertex_descriptor const& sink)
   {
-    double max_flow  = getMaxFlow(graph, source, sink);
-    auto   res_graph = getResidualGraph(graph);
+    int  max_flow  = getMaxFlow(graph, source, sink);
+    auto res_graph = getResidualGraph(graph);
 
-    while (getCyclesFromGraph(res_graph, source).size() != 0) {
-      // reduce cost (flow) along cycle with smallest average cost along cycle
-      // update residual cost graph
+    auto cycles = getCyclesFromGraph(res_graph, source);
+
+    while (cycles.size() != 0) {
+      // find cycle with smallest average cost along its path
+      int index = getIndexOfCycleWithSmallestAVGCost(res_graph, cycles);
+      // increase flow along negative cost cycle, and update residual graph
+      updateCycleCost(res_graph, cycles[index]);
       // repeat
-      break;
     }
 
-    std::pair<double, double> result;
+    std::pair<int, int> result;
 
     result.first  = 0;
     result.second = max_flow;

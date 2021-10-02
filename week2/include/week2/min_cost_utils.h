@@ -24,7 +24,7 @@ namespace dte3603::week2::algorithms
     using EdgeDescriptor   = typename Graph_T::edge_descriptor;
 
     std::unordered_map<VertexDescriptor, VertexDescriptor> previous;
-    std::unordered_map<VertexDescriptor, double>           distance;
+    std::unordered_map<VertexDescriptor, int>              distance;
     std::unordered_map<VertexDescriptor, bool>             visited;
     int                                                    num_vertices = 0;
 
@@ -62,9 +62,9 @@ namespace dte3603::week2::algorithms
       VertexDescriptor source_vertex = boost::source(*edge_it, graph);
       VertexDescriptor target_vertex = boost::target(*edge_it, graph);
 
-      double source_distance = distance[source_vertex];
-      double edge_cost       = graph[(*edge_it)].cost;
-      double target_distance = distance[target_vertex];
+      int source_distance = distance[source_vertex];
+      int edge_cost       = graph[(*edge_it)].cost;
+      int target_distance = distance[target_vertex];
 
       if (source_distance + edge_cost < target_distance
           && previous[source_vertex] != target_vertex) {
@@ -104,6 +104,89 @@ namespace dte3603::week2::algorithms
     }
 
     return cycles;
+  }
+
+  template <predef::concepts::graph::DirectionalGraph Graph_T>
+  int getIndexOfCycleWithSmallestAVGCost(
+    [[maybe_unused]] Graph_T const& res_graph,
+    [[maybe_unused]] std::vector<
+      std::vector<typename Graph_T::vertex_descriptor>>
+      cycles)
+  {
+    double smallest_avg = 0;
+    int    cycle_index  = 0;
+
+    for (int i = 0; i < cycles.size(); i++) {
+      auto cycle          = cycles[i];
+      int  cycle_cost_sum = 0;
+      for (int j = 0; j < cycle.size() - 1; j++) {
+        auto current_edge = boost::edge(cycle[i], cycle[i + 1], res_graph);
+        cycle_cost_sum += res_graph[current_edge.first].cost;
+      }
+
+      auto current_edge = boost::edge(cycle[cycle.size()], cycle[0], res_graph);
+      cycle_cost_sum += res_graph[current_edge.first].cost;
+
+      if (cycle_cost_sum / cycle.size() < smallest_avg) {
+        smallest_avg = static_cast<double>(cycle_cost_sum) / cycle.size();
+        cycle_index  = i;
+      }
+    }
+
+    return cycle_index;
+  }
+
+  template <predef::concepts::graph::DirectionalGraph Graph_T>
+  void updateCycleCost(
+    [[maybe_unused]] Graph_T&                                         res_graph,
+    [[maybe_unused]] std::vector<typename Graph_T::vertex_descriptor> cycle)
+  {
+    using EdgeDescriptor = typename Graph_T::edge_descriptor;
+    std::vector<EdgeDescriptor> edges;
+    int                         min_cost = std::numeric_limits<int>::max();
+    for (int i = 0; i < cycle.size() - 1; i++) {
+      auto current_edge = boost::edge(cycle[i], cycle[i + 1], res_graph);
+      if (!current_edge.second) {
+        throw "CAN'T FIND EDGE FROM CYCLE IN RESIDUAL GRAPH";
+      }
+      int current_edge_cost = std::abs(res_graph[current_edge.first].cost);
+      if (current_edge_cost < min_cost) {
+        min_cost = current_edge_cost;
+      }
+
+      edges.push_back(current_edge.first);
+    }
+
+    auto last_edge = boost::edge(cycle[cycle.size() - 1], cycle[0], res_graph);
+    if (!last_edge.second) {
+      throw "CAN'T FIND EDGE FROM CYCLE IN RESIDUAL GRAPH";
+    }
+    int current_edge_cost = std::abs(res_graph[last_edge.first].cost);
+    if (current_edge_cost < min_cost) {
+      min_cost = current_edge_cost;
+    }
+
+    edges.push_back(last_edge.first);
+
+    for (auto e : edges) {
+      res_graph[e].cost += min_cost;
+      auto reverse_edge = boost::edge(boost::target(e, res_graph),
+                                      boost::source(e, res_graph), res_graph);
+      if (reverse_edge.second) {
+        res_graph[reverse_edge.first].cost += min_cost;
+        if (res_graph[reverse_edge.first].cost == 0) {
+          boost::remove_edge(reverse_edge.first, res_graph);
+        }
+      }
+      else {
+        boost::add_edge(boost::target(e, res_graph),
+                        boost::source(e, res_graph), {0, 0, min_cost},
+                        res_graph);
+      }
+      if (res_graph[e].cost == 0) {
+        boost::remove_edge(e, res_graph);
+      }
+    }
   }
 }   // namespace dte3603::week2::algorithms
 

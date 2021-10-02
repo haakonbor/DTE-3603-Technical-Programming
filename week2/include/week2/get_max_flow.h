@@ -7,10 +7,11 @@
 namespace dte3603::week2::algorithms
 {
   template <predef::concepts::graph::DirectionalGraph Graph_T>
-  double
-  getMaxFlow([[maybe_unused]] Graph_T&                                   graph,
-             [[maybe_unused]] typename Graph_T::vertex_descriptor const& source,
-             [[maybe_unused]] typename Graph_T::vertex_descriptor const& sink)
+  int getMaxFlow([[maybe_unused]] Graph_T& graph,
+                 [[maybe_unused]]
+                 typename Graph_T::vertex_descriptor const& source,
+                 [[maybe_unused]]
+                 typename Graph_T::vertex_descriptor const& sink)
   {
     using VertexDescriptor = typename Graph_T::vertex_descriptor;
     using EdgeDescriptor   = typename Graph_T::edge_descriptor;
@@ -20,7 +21,7 @@ namespace dte3603::week2::algorithms
 
     typename boost::graph_traits<Graph_T>::out_edge_iterator edge_it, edge_end;
     boost::tie(edge_it, edge_end) = boost::out_edges(source, graph);
-    double current_flow           = graph[*edge_it].flow;
+    int current_flow              = graph[*edge_it].flow;
 
     while (shortest_path.size() != 0) {
       current_flow += increaseFlow(shortest_path, graph);

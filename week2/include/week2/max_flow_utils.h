@@ -187,12 +187,12 @@ namespace dte3603::week2::algorithms
   }
 
   template <predef::concepts::graph::DirectionalGraph Graph_T>
-  double increaseFlow(std::vector<typename Graph_T::edge_descriptor> path,
-                      [[maybe_unused]] Graph_T&                      graph)
+  int increaseFlow(std::vector<typename Graph_T::edge_descriptor> path,
+                   [[maybe_unused]] Graph_T&                      graph)
   {
     using EdgeDescriptor = typename Graph_T::edge_descriptor;
 
-    double min_residue = std::numeric_limits<double>::max();
+    int min_residue = std::numeric_limits<int>::max();
 
     for (auto edge = path.begin() + 1; edge != path.end() - 1; edge++) {
       std::pair<EdgeDescriptor, bool> current_edge
@@ -205,13 +205,13 @@ namespace dte3603::week2::algorithms
           throw "SHORTEST PATH EDGE NOT FOUND IN FLOW GRAPH!";
         }
 
-        double current_edge_flow = graph[current_edge.first].flow;
+        int current_edge_flow = graph[current_edge.first].flow;
         if (current_edge_flow < min_residue) {
           min_residue = current_edge_flow;
         }
       }
       else {
-        double current_edge_residue
+        int current_edge_residue
           = graph[current_edge.first].capacity - graph[current_edge.first].flow;
         if (current_edge_residue < min_residue) {
           min_residue = current_edge_residue;
