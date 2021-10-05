@@ -23,6 +23,7 @@ namespace dte3603::predef::testing::week2::fixtures
   using DGOneF   = GoldWeek2_TestF<gold::DGOne>;
   using DGTwoF   = GoldWeek2_TestF<gold::DGTwo>;
   using DGThreeF = GoldWeek2_TestF<gold::DGThree>;
+  using DGFourF  = GoldWeek2_TestF<gold::DGFour>;
 
 }   // namespace dte3603::predef::testing::week2::fixtures
 

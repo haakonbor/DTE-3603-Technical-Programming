@@ -16,7 +16,7 @@ namespace dte3603::week2::algorithms
 
   template <predef::concepts::graph::DirectionalGraph Graph_T>
   std::vector<std::vector<typename Graph_T::vertex_descriptor>>
-  getCyclesFromGraph([[maybe_unused]] Graph_T const& graph,
+  getCyclesFromGraph([[maybe_unused]] Graph_T const& res_graph,
                      [[maybe_unused]]
                      typename Graph_T::vertex_descriptor const& start)
   {
@@ -30,7 +30,7 @@ namespace dte3603::week2::algorithms
 
     typename boost::graph_traits<Graph_T>::vertex_iterator vertex_it,
       vertex_end;
-    boost::tie(vertex_it, vertex_end) = boost::vertices(graph);
+    boost::tie(vertex_it, vertex_end) = boost::vertices(res_graph);
 
     for (; vertex_it != vertex_end; vertex_it++) {
       num_vertices++;
@@ -42,34 +42,36 @@ namespace dte3603::week2::algorithms
     distance[start] = 0;
     typename boost::graph_traits<Graph_T>::edge_iterator edge_it, edge_end;
     for (int i = 1; i < num_vertices - 1; i++) {
-      boost::tie(edge_it, edge_end) = boost::edges(graph);
+      boost::tie(edge_it, edge_end) = boost::edges(res_graph);
       for (; edge_it != edge_end; edge_it++) {
-        VertexDescriptor source_vertex = boost::source(*edge_it, graph);
-        VertexDescriptor target_vertex = boost::target(*edge_it, graph);
+        VertexDescriptor source_vertex = boost::source(*edge_it, res_graph);
+        VertexDescriptor target_vertex = boost::target(*edge_it, res_graph);
         EdgeDescriptor   edge          = *edge_it;
 
-        if (distance[source_vertex] + graph[edge].cost
+        if (distance[source_vertex] + res_graph[edge].cost
             < distance[target_vertex]) {
-          distance[target_vertex] = distance[source_vertex] + graph[edge].cost;
+          distance[target_vertex]
+            = distance[source_vertex] + res_graph[edge].cost;
           previous[target_vertex] = source_vertex;
         }
       }
     }
 
-    boost::tie(edge_it, edge_end) = boost::edges(graph);
+    boost::tie(edge_it, edge_end) = boost::edges(res_graph);
     std::vector<std::vector<VertexDescriptor>> cycles;
     for (; edge_it != edge_end; edge_it++) {
-      VertexDescriptor source_vertex = boost::source(*edge_it, graph);
-      VertexDescriptor target_vertex = boost::target(*edge_it, graph);
+      VertexDescriptor source_vertex = boost::source(*edge_it, res_graph);
+      VertexDescriptor target_vertex = boost::target(*edge_it, res_graph);
 
       int source_distance = distance[source_vertex];
-      int edge_cost       = graph[(*edge_it)].cost;
+      int edge_cost       = res_graph[(*edge_it)].cost;
       int target_distance = distance[target_vertex];
 
       if (source_distance + edge_cost < target_distance
           && previous[source_vertex] != target_vertex) {
 
-        previous[target_vertex] = source_vertex;
+        VertexDescriptor old_previous = previous[target_vertex];
+        previous[target_vertex]       = source_vertex;
         std::vector<VertexDescriptor>        current_cycle;
         std::unordered_set<VertexDescriptor> in_cycle;
         VertexDescriptor                     current_vertex = source_vertex;
@@ -100,6 +102,8 @@ namespace dte3603::week2::algorithms
             }
           }
         }
+
+        previous[target_vertex] = old_previous;
       }
     }
 
@@ -120,11 +124,12 @@ namespace dte3603::week2::algorithms
       auto cycle          = cycles[i];
       int  cycle_cost_sum = 0;
       for (int j = 0; j < cycle.size() - 1; j++) {
-        auto current_edge = boost::edge(cycle[i], cycle[i + 1], res_graph);
+        auto current_edge = boost::edge(cycle[j], cycle[j + 1], res_graph);
         cycle_cost_sum += res_graph[current_edge.first].cost;
       }
 
-      auto current_edge = boost::edge(cycle[cycle.size()], cycle[0], res_graph);
+      auto current_edge
+        = boost::edge(cycle[cycle.size() - 1], cycle[0], res_graph);
       cycle_cost_sum += res_graph[current_edge.first].cost;
 
       if (cycle_cost_sum / cycle.size() < smallest_avg) {
@@ -137,56 +142,90 @@ namespace dte3603::week2::algorithms
   }
 
   template <predef::concepts::graph::DirectionalGraph Graph_T>
-  void updateCycleCost(
-    [[maybe_unused]] Graph_T&                                         res_graph,
+  void updateCycleFlow(
+    [[maybe_unused]] Graph_T&                                         graph,
     [[maybe_unused]] std::vector<typename Graph_T::vertex_descriptor> cycle)
   {
     using EdgeDescriptor = typename Graph_T::edge_descriptor;
-    std::vector<EdgeDescriptor> edges;
-    int                         min_cost = std::numeric_limits<int>::max();
+    std::vector<std::pair<EdgeDescriptor, bool>> edges;
+    int min_residual = std::numeric_limits<int>::max();
     for (int i = 0; i < cycle.size() - 1; i++) {
-      auto current_edge = boost::edge(cycle[i], cycle[i + 1], res_graph);
+      bool                            add_flow = true;
+      std::pair<EdgeDescriptor, bool> edge_flow_sign_pair;
+      auto current_edge = boost::edge(cycle[i], cycle[i + 1], graph);
       if (!current_edge.second) {
-        throw "CAN'T FIND EDGE FROM CYCLE IN RESIDUAL GRAPH";
+        current_edge = boost::edge(cycle[i + 1], cycle[i], graph);
+        add_flow     = false;
       }
-      int current_edge_cost = std::abs(res_graph[current_edge.first].cost);
-      if (current_edge_cost < min_cost) {
-        min_cost = current_edge_cost;
-      }
+      edge_flow_sign_pair.first  = current_edge.first;
+      edge_flow_sign_pair.second = add_flow;
 
-      edges.push_back(current_edge.first);
-    }
-
-    auto last_edge = boost::edge(cycle[cycle.size() - 1], cycle[0], res_graph);
-    if (!last_edge.second) {
-      throw "CAN'T FIND EDGE FROM CYCLE IN RESIDUAL GRAPH";
-    }
-    int current_edge_cost = std::abs(res_graph[last_edge.first].cost);
-    if (current_edge_cost < min_cost) {
-      min_cost = current_edge_cost;
-    }
-
-    edges.push_back(last_edge.first);
-
-    for (auto e : edges) {
-      res_graph[e].cost += min_cost;
-      auto reverse_edge = boost::edge(boost::target(e, res_graph),
-                                      boost::source(e, res_graph), res_graph);
-      if (reverse_edge.second) {
-        res_graph[reverse_edge.first].cost += min_cost;
-        if (res_graph[reverse_edge.first].cost == 0) {
-          boost::remove_edge(reverse_edge.first, res_graph);
-        }
+      int current_edge_residual = 0;
+      if (add_flow) {
+        current_edge_residual
+          = graph[current_edge.first].capacity - graph[current_edge.first].flow;
       }
       else {
-        boost::add_edge(boost::target(e, res_graph),
-                        boost::source(e, res_graph), {0, 0, min_cost},
-                        res_graph);
+        current_edge_residual = graph[current_edge.first].flow;
       }
-      if (res_graph[e].cost == 0) {
-        boost::remove_edge(e, res_graph);
+
+      if (current_edge_residual < min_residual) {
+        min_residual = current_edge_residual;
+      }
+
+      edges.push_back(edge_flow_sign_pair);
+    }
+
+    std::pair<EdgeDescriptor, bool> edge_flow_sign_pair;
+
+    bool add_flow     = true;
+    auto current_edge = boost::edge(cycle[cycle.size() - 1], cycle[0], graph);
+    if (!current_edge.second) {
+      current_edge = boost::edge(cycle[0], cycle[cycle.size() - 1], graph);
+      add_flow     = false;
+    }
+
+    edge_flow_sign_pair.first  = current_edge.first;
+    edge_flow_sign_pair.second = add_flow;
+
+    int current_edge_residual = 0;
+    if (add_flow) {
+      current_edge_residual
+        = graph[current_edge.first].capacity - graph[current_edge.first].flow;
+    }
+    else {
+      current_edge_residual = graph[current_edge.first].flow;
+    }
+
+    if (current_edge_residual < min_residual) {
+      min_residual = current_edge_residual;
+    }
+
+    edges.push_back(edge_flow_sign_pair);
+
+    for (auto pair : edges) {
+      if (pair.second) {
+        graph[pair.first].flow += min_residual;
+      }
+      else {
+        graph[pair.first].flow -= min_residual;
       }
     }
+  }
+
+  template <predef::concepts::graph::DirectionalGraph Graph_T>
+  int getTotalFlowCost([[maybe_unused]] Graph_T& graph)
+  {
+    typename boost::graph_traits<Graph_T>::edge_iterator edge_it, edge_end;
+    boost::tie(edge_it, edge_end) = boost::edges(graph);
+
+    int current_cost = 0;
+
+    for (; edge_it != edge_end; edge_it++) {
+      current_cost += graph[*edge_it].flow * graph[*edge_it].cost;
+    }
+
+    return current_cost;
   }
 }   // namespace dte3603::week2::algorithms
 

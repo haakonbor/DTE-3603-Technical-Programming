@@ -70,7 +70,30 @@ TEST_F(DGTwoF, getCyclesTest)
 
 TEST_F(DGTwoF, minCostMaxFlowTest)
 {
-  alg::getMinCostMaxFlow(gold->graph(), gold->s(), gold->t());
+  std::pair<int, int> result
+    = alg::getMinCostMaxFlow(gold->graph(), gold->s(), gold->t());
+  std::pair<int, int> gold_result;
+  gold_result.first  = gold->minCostGold();
+  gold_result.second = gold->flowFromStoTGold();
 
-  EXPECT_EQ(1, 0);
+  EXPECT_EQ(result, gold_result);
+}
+
+TEST_F(DGFourF, getMaxFlowTest)
+{
+  int flow      = alg::getMaxFlow(gold->graph(), gold->s(), gold->t());
+  int gold_flow = gold->flowFromStoTGold();
+
+  EXPECT_EQ(flow, gold_flow);
+}
+
+TEST_F(DGFourF, minCostMaxFlowTest)
+{
+  std::pair<int, int> result
+    = alg::getMinCostMaxFlow(gold->graph(), gold->s(), gold->t());
+  std::pair<int, int> gold_result;
+  gold_result.first  = gold->minCostGold();
+  gold_result.second = gold->flowFromStoTGold();
+
+  EXPECT_EQ(result, gold_result);
 }

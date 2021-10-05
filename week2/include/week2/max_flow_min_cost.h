@@ -21,14 +21,19 @@ namespace dte3603::week2::algorithms
     while (cycles.size() != 0) {
       // find cycle with smallest average cost along its path
       int index = getIndexOfCycleWithSmallestAVGCost(res_graph, cycles);
-      // increase flow along negative cost cycle, and update residual graph
-      updateCycleCost(res_graph, cycles[index]);
+      // change flow along negative cost cycle, and update residual
+      // graph
+      updateCycleFlow(graph, cycles[index]);
+      res_graph = getResidualGraph(graph);
       // repeat
+      cycles = getCyclesFromGraph(res_graph, source);
     }
+
+    int new_cost = getTotalFlowCost(graph);
 
     std::pair<int, int> result;
 
-    result.first  = 0;
+    result.first  = new_cost;
     result.second = max_flow;
 
     return result;
