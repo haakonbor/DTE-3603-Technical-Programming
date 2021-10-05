@@ -35,15 +35,6 @@ TEST_F(DGTwoF, getMaxFlowTest)
   EXPECT_EQ(flow, gold_flow);
 }
 
-// DGThreeF
-TEST_F(DGThreeF, getMaxFlowTest)
-{
-  int flow      = alg::getMaxFlow(gold->graph(), gold->s(), gold->t());
-  int gold_flow = gold->flowFromStoTGold();
-
-  EXPECT_EQ(flow, gold_flow);
-}
-
 // DGTwoF - Cycles
 TEST_F(DGTwoF, getCyclesTest)
 {
@@ -77,6 +68,15 @@ TEST_F(DGTwoF, minCostMaxFlowTest)
   gold_result.second = gold->flowFromStoTGold();
 
   EXPECT_EQ(result, gold_result);
+}
+
+// DGThreeF
+TEST_F(DGThreeF, getMaxFlowTest)
+{
+  int flow      = alg::getMaxFlow(gold->graph(), gold->s(), gold->t());
+  int gold_flow = gold->flowFromStoTGold();
+
+  EXPECT_EQ(flow, gold_flow);
 }
 
 TEST_F(DGFourF, getMaxFlowTest)

@@ -69,61 +69,6 @@ namespace dte3603::week2::algorithms
   }
 
   template <predef::concepts::graph::DirectionalGraph Graph_T>
-  std::vector<typename Graph_T::edge_descriptor> dfsUnweightedPath(
-    [[maybe_unused]] Graph_T const&                             graph,
-    [[maybe_unused]] typename Graph_T::vertex_descriptor const& start,
-    [[maybe_unused]] typename Graph_T::vertex_descriptor const& goal)
-  {
-    using VertexDescriptor = typename Graph_T::vertex_descriptor;
-    using EdgeDescriptor   = typename Graph_T::edge_descriptor;
-
-    std::set<VertexDescriptor>                   is_visited;
-    std::map<VertexDescriptor, VertexDescriptor> previous;
-    std::stack<VertexDescriptor>                 stack;
-    std::vector<EdgeDescriptor>                  edge_path;
-
-
-    stack.push(start);
-    is_visited.insert(start);
-    previous.insert({start, NULL});
-
-    while (!stack.empty()) {
-      VertexDescriptor current_vertex = stack.top();
-      stack.pop();
-
-      typename boost::graph_traits<Graph_T>::out_edge_iterator edge_it,
-        edge_end;
-      boost::tie(edge_it, edge_end) = boost::out_edges(current_vertex, graph);
-
-      for (; edge_it != edge_end; edge_it++) {
-        VertexDescriptor adjacent_vertex = boost::target(*edge_it, graph);
-        if (!is_visited.contains(adjacent_vertex)) {
-          is_visited.insert(adjacent_vertex);
-          previous.insert({adjacent_vertex, current_vertex});
-          stack.push(adjacent_vertex);
-
-          if (adjacent_vertex == goal) {
-            current_vertex = goal;
-
-            while (current_vertex != start) {
-              EdgeDescriptor current_edge
-                = boost::edge(previous[current_vertex], current_vertex, graph)
-                    .first;
-              edge_path.push_back(current_edge);
-              current_vertex = previous[current_vertex];
-            }
-
-            return edge_path;
-          }
-        }
-      }
-    }
-
-    return edge_path;
-  }
-
-
-  template <predef::concepts::graph::DirectionalGraph Graph_T>
   std::string addResidualEdges([[maybe_unused]] Graph_T const& graph,
                                [[maybe_unused]] Graph_T&       residual_graph,
                                [[maybe_unused]]

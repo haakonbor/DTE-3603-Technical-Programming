@@ -17,7 +17,7 @@ namespace dte3603::week2::algorithms
     using EdgeDescriptor   = typename Graph_T::edge_descriptor;
     auto                        residual_graph = getResidualGraph(graph);
     std::vector<EdgeDescriptor> shortest_path
-      = dfsUnweightedShortestPath(residual_graph, source, sink);
+      = bfsUnweightedShortestPath(residual_graph, source, sink);
 
     typename boost::graph_traits<Graph_T>::out_edge_iterator edge_it, edge_end;
     boost::tie(edge_it, edge_end) = boost::out_edges(source, graph);
@@ -26,9 +26,7 @@ namespace dte3603::week2::algorithms
     while (shortest_path.size() != 0) {
       current_flow += increaseFlow(shortest_path, graph);
       residual_graph = getResidualGraph(graph);
-      // shortest_path  = bfsUnweightedShortestPath(residual_graph, source,
-      // sink);
-      shortest_path = dfsUnweightedShortestPath(residual_graph, source, sink);
+      shortest_path  = bfsUnweightedShortestPath(residual_graph, source, sink);
     }
 
     return current_flow;
