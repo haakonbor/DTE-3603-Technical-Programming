@@ -185,23 +185,23 @@ BENCHMARK_DEFINE_F(Random01IntColF, AndAlxSort)
 // algorithms
 BENCHMARK_REGISTER_F(SortedIntColF, stlSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(SortedIntColF, countingSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(SortedIntColF, binarySort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(SortedIntColF, radixSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(SortedIntColF, AndAlxSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 
 
@@ -209,89 +209,89 @@ BENCHMARK_REGISTER_F(SortedIntColF, AndAlxSort)
 // different algorithms
 BENCHMARK_REGISTER_F(ReverseIntColF, stlSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(ReverseIntColF, countingSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(ReverseIntColF, binarySort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(ReverseIntColF, radixSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(ReverseIntColF, AndAlxSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 // Register Benchmark : benchmark sorting of a organpipe-ordered collection
 // using different algorithms
 BENCHMARK_REGISTER_F(OrganpipeIntColF, stlSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(OrganpipeIntColF, countingSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(OrganpipeIntColF, binarySort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(OrganpipeIntColF, radixSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(OrganpipeIntColF, AndAlxSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 // Register Benchmark : benchmark sorting of a rotated collection using
 // different algorithms
 BENCHMARK_REGISTER_F(RotatedIntColF, stlSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(RotatedIntColF, countingSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(RotatedIntColF, binarySort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(RotatedIntColF, radixSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(RotatedIntColF, AndAlxSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e6);
 
 // Register Benchmark : benchmark sorting of a random collection using different
 // algorithms
 BENCHMARK_REGISTER_F(Random01IntColF, stlSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(Random01IntColF, countingSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(Random01IntColF, binarySort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_REGISTER_F(Random01IntColF, radixSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 
 BENCHMARK_REGISTER_F(Random01IntColF, AndAlxSort)
   ->RangeMultiplier(10)
-  ->Range(1e4, 1e6);
+  ->Range(1e2, 1e7);
 
 BENCHMARK_MAIN();
