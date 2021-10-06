@@ -61,6 +61,7 @@ add_subdirectory(day1_2_sort)
 add_subdirectory(day3_string_match)
 add_subdirectory(day4_graph_traversal)
 add_subdirectory(day5_graph_path_finding)
+add_subdirectory(week2)
 
 
 ###########################################
