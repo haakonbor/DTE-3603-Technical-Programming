@@ -12,7 +12,7 @@ namespace dte3603::graph::operators
                       typename Graph_T::edge_descriptor const& e,
                       [[maybe_unused]] Graph_T const&          graph)
     {
-      return 1.;
+      return graph[e].distance;
     }
   };
 

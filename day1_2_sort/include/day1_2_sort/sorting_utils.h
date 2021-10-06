@@ -21,10 +21,12 @@ namespace dte3603::sort::algorithms
 
     size_t n_digits(int n) {
         int digits = 0;
+
         while (n != 0 ) {
             n /= 10;
             digits++;
         }
+
         return digits;
     }
 
